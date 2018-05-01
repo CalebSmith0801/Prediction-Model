@@ -1,0 +1,68 @@
+.cargoLogo{
+  	height:80px;
+	float: left;
+	display: block;
+	padding: 15px 40px 15px 20px;
+}
+
+.navbar{
+	overflow: hidden;
+	background-color: #183f43;
+	border-bottom: 3px solid #e8de3b;
+}
+
+.navbar a {
+	margin-top:40px;
+	margin-right:20px;
+	float: left;
+	display: block;
+	color: white;
+	padding: 25px 20px;
+	text-align: center;
+	text-decoration: none;
+	font-size: 25px;
+}
+		
+.tab{
+	margin: auto;
+	height: 50%;
+}
+	
+.navbar a:hover{
+	color:yellow;
+	transition: 0.75s;
+}
+
+.navbar .icon{
+	display: none;
+}
+
+@media screen and (max-width: 600px){
+	.navbar a:not(:first-child){
+		display: none;
+	}
+			
+	.navbar a.icon{
+		margin:0;
+		float: right;
+		display: block;
+	}
+}
+
+@media screen and (max-width: 600px){
+	.navbar.responsive, {
+		position: relative;
+	}
+	.navbar.responsive .icon{
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+	.navbar.responsive a, .navbar.responsive img{
+		margin:0;
+		float: none;
+		display: block;
+		text-align: left;
+		font-size: 17px;
+	}
+}

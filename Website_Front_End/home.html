@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="CSS/navbar.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json_parse.min.js"></script>
+  <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+	<script src="JS/home.js"></script>
+	<script src="JS/home_chart.js"></script>
+
+
+
+
+	<style>
+		body{
+			margin: 0;
+			font-family: Arial;
+		}
+
+		.currentDate{
+			text-align: center;
+			font-size: 20px;
+			margin-bottom: 30px;
+		}
+
+		.driversContainer {
+			text-align:center;
+			margin-bottom: 20px;
+		}
+
+		.available p{
+			display:inline;
+			font-size:30px;
+		}
+
+		.total p{
+			display:inline;
+			font-size: 20px;
+		}
+
+		.predictionBoxes{
+			text-align: center;
+			margin-bottom: 20px;
+		}
+
+		.predictionBoxes p{
+			margin:0;
+		}
+
+		.predictionBoxes:after{
+			content: "";
+			display: table;
+			clear: both;
+		}
+		.DriversNeededBox{
+			display: inline-block;
+			padding: 2% 0;
+			width: 174px;
+			border: 1px solid black;
+			border-radius: 25px;
+		}
+
+		.graphSection{
+			text-align:center;
+			width: 75%;
+			margin: 0 auto;
+			border: 2px solid #727272;
+			margin-top:50px;
+		}
+
+
+
+	</style>
+</head>
+
+<body onload="startTime()">
+
+
+	<div class="navbar" id="nb">
+		<img class="cargoLogo" src="cargo-logo.png"/>
+		<a href="home.html">Home</a>
+		<a href="history.html">History</a>
+		<a href="javascript:void(0);" style="font-size:20px;" class="icon" onclick="compressNavBar()">&#9776;</a>
+	</div>
+
+	<div style="padding:0px 20px">
+		<div class="currentDate">
+			<p style="margin-bottom:0px">
+				<script> document.write(new Date().toDateString()); </script>
+			</p>
+			<div id="time"></div>
+		</div>
+
+
+		<div class="driversContainer">
+			<div class="available">
+
+				<p id="driversAvailable"></p> <!-- Available Drivers Variable -->
+				<p> Drivers Available</p>
+			</div>
+			<div class="total">
+				<p id="totalDrivers"></p>  <!-- Total Drivers Variable -->
+				<p> Total Drivers</p>
+			</div>
+		</div>
+
+
+		<div class="predictionBoxes">
+			<div class="DriversNeededBox" style="margin-right:11%">
+				<p style="font-size:30px" id="5Min"><b>00</b></p>
+				<p>More Drivers Needed</p>
+				@ <div style="display:inline" id="5MinTime"></div>
+			</div>
+			<div class="DriversNeededBox">
+				<p style="font-size:30px" id="30Min"><b>00</b></p>
+				<p>More Drivers Needed</p>
+				@ <div style="display:inline"id="30MinTime"></div>
+			</div>
+		</div>
+
+
+		<div class="graphSection" height="150px">
+			<h2 >Prediction vs. Actual Total Drivers</h2>
+			<canvas id="todaysChart"></canvas>
+
+		</div>
+
+		<br><br>
+
+	</div>
+
+	<script>
+		function compressNavBar() {
+			var x = document.getElementById("nb");
+			if (x.className === "navbar") {
+				x.className += " responsive";
+			} else {
+				x.className = "navbar";
+			}
+		}
+
+		function startTime() {
+			var today = new Date();
+			var fiveMin = calculateFutureTime(today, 5);
+			var thirtyMin = calculateFutureTime(today, 30);
+			var h = today.getHours();
+			var m = today.getMinutes();
+			var s = today.getSeconds();
+			var ampm = calculateAMPM(h);
+			h = offsetHour(h);
+			m = checkTime(m);
+			s = checkTime(s);
+			document.getElementById('time').innerHTML =
+			h + ":" + m + ":" + s + " " + ampm;
+
+			document.getElementById('5MinTime').innerHTML =
+			offsetHour(fiveMin.getHours()) + ":" + checkTime(fiveMin.getMinutes()) + " " + calculateAMPM(fiveMin.getHours());
+
+			document.getElementById('30MinTime').innerHTML =
+			offsetHour(thirtyMin.getHours()) + ":" + checkTime(thirtyMin.getMinutes()) + " " + calculateAMPM(thirtyMin.getHours());
+
+			var t = setTimeout(startTime, 500);
+		}
+
+		<!-- Makes 7:7:12 PM into 7:07:12 PM -->
+		function checkTime(i) {
+			if (i < 10) {i = "0" + i};
+			return i;
+		}
+
+		function offsetHour(i){
+			i = i % 12;
+			i = i ? i : 12; // the hour '0' should be '12'
+			return i;
+		}
+
+		function calculateAMPM(i) {
+			var ampm = i >= 12 ? 'PM' : 'AM';
+			return ampm;
+		}
+
+		function calculateFutureTime(currentTime, minutes){
+			var futureTime = new Date();
+			futureTime.setMinutes(currentTime.getMinutes() + minutes);
+			return futureTime;
+		}
+	</script>
+<script> var x = setInterval(getDrivers, 30000); getDrivers();</script>
+<script> var y = setInterval(getChart, 30000); getChart();</script>
+</body>
+
+</html>

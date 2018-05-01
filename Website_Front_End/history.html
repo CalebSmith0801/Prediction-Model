@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>History Page</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="css/navbar.css">
+
+	<!-- JQuery datepicker compared to the HTML5 one I coded. This one maintains a consistent style across browsers
+	and works on all browsers unlike the HTML5 one-->
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+	<script
+  src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+  integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+  crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/json2/20160511/json_parse.min.js"></script>
+
+	<script src="js/days_charts.js"></script>
+	<script src="js/select_history.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.7.0/moment.min.js"></script>
+
+
+	<style>
+		body{
+			margin: 0;
+			font-family: Arial;
+		}
+
+		select{
+			display: inline;
+		}
+
+
+		.labels{
+			padding-top:0px;
+			margin: 0px;
+			text-align:right;
+			font-size: 20px;
+		}
+
+		.flex-container{
+			display:flex;
+			justify-content:flex-start;
+			align-items:stretch;
+			flex-wrap:nowrap;
+			padding: 20px;
+			margin-top:20px;
+		}
+
+		.graph-area{
+			min-height:550px;
+			flex-basis:80%;
+		}
+
+		.time-range-section{
+			min-height:550px;
+			flex-basis:20%;
+			border-left: 2px solid #a8a8a8;
+		}
+
+		.time-range-content{
+			margin: 30px 40px;
+		}
+
+		.date-range-fields td {
+			padding-bottom: 20px;
+		}
+
+		.date-range-fields {
+			margin-left:20px;
+		}
+		.submitBut {
+			height: 30px;
+			width: 70px;
+			margin-left: 210px;
+		}
+		
+		.graphs{
+			width: 75%;
+			margin: 0 auto;
+		}
+		
+		.graphs canvas {
+			border: 2px solid #727272;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="navbar" id="nb">
+		<img class="cargoLogo" src="cargo-logo.png"/>
+		<a href="home.html">Home</a>
+		<a href="history.html">History</a>
+		<a href="javascript:void(0);" style="font-size:20px;" class="icon" onclick="expandNavBar()">&#9776;</a>
+	</div>
+
+	<div class = "flex-container">
+		<div class="graph-area">
+			<h2>Last Week's Prediction vs Actual</h2>
+			<div class="graphs">
+			<h3 id="selectLabel" style="text-align:center"></h3>
+			<div id="select_history_chart_content">
+				
+			</div><br>
+			<h3 id="d1Label" style="text-align:center"></h3>
+			<canvas id="d1Chart"></canvas><br>
+			
+			<h3 id="d2Label" style="text-align:center"></h3>
+			<canvas id="d2Chart"></canvas><br>
+			
+			<h3 id="d3Label" style="text-align:center"></h3>
+			<canvas id="d3Chart"></canvas><br>
+			
+			<h3 id="d4Label" style="text-align:center"></h3>
+			<canvas id="d4Chart"></canvas><br>
+			
+			<h3 id="d5Label" style="text-align:center"></h3>
+			<canvas id="d5Chart"></canvas><br>
+			
+			<h3 id="d6Label" style="text-align:center"></h3>
+			<canvas id="d6Chart"></canvas><br>
+			
+			<h3 id="d7Label" style="text-align:center"></h3>
+			<canvas id="d7Chart"></canvas><br>
+			</div>
+		</div>
+		<div class="time-range-section">
+			<div class="time-range-content">
+				<h2>Date Range</h2>
+				<table style="margin-bottom: 0px" class="date-range-fields">
+					<tr>
+						<td style="padding-right: 20px;">
+							<p class="labels">Start:</p>
+						</td>
+						<td>
+							<input readonly type="text" value="11/01/2017" name="start" min="2017-11-01" id="datepicker">
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-right: 20px">
+							<p class="labels">End:</p>
+						</td>
+						<td>
+							<input readonly type="text" value="11/01/2017" name="start" min="2017-11-01" id="datepicker2">
+						</td>
+					</tr>
+					<tr>
+						<td style="padding-right: 20px;">
+							<p class="labels">Time:</p>
+						</td>
+						<td>
+							<table>
+								<tr>
+									<td style="padding-bottom:0px; padding-right:10px;">
+										HR:<select id="hours" type="text">
+											<option>09</option>
+											<option>10</option>
+											<option>11</option>
+											<option>12</option>
+											<option>13</option>
+											<option>14</option>
+											<option>15</option>
+											<option>16</option>
+											<option>17</option>
+											<option>18</option>
+											<option>19</option>
+											<option>20</option>
+											<option>21</option>
+											<option>22</option>
+											<option>23</option>
+											<option>00</option>
+											<option>01</option>
+											<option>02</option>
+									</td>
+									<td style="padding-bottom:0px">
+										MN:<select id="minutes" type="text">
+											<option>00</option>
+											<option>15</option>
+											<option>30</option>
+											<option>45</option>
+									</td>
+								</tr>
+
+							</table>
+						</td>
+					</tr>
+				</table>
+
+				<button class="submitBut" type="button" onclick="getHistory()">Submit</button>
+
+
+				<br><br>
+			</div>
+		</div>
+	</div>
+
+	<div class="vertical-line"></div>
+
+	<script>
+		function expandNavBar() {
+			var x = document.getElementById("nb");
+			if (x.className === "navbar") {
+				x.className += " responsive";
+			} else {
+				x.className = "navbar";
+			}
+		}
+		function maxDate(id) {
+			$(id).datepicker({
+				showOn: "button",
+				buttonImage: "calendar-icon.png",
+				buttonImageOnly: true,
+				buttonText: "Select date",
+				minDate: new Date(2017, 10, 01),
+				maxDate: new Date()
+			});
+		 }
+
+	    maxDate("#datepicker");
+		maxDate("#datepicker2");
+
+		function submitDateRange(){
+			if (isValidRange())
+				alert("Valid Date");
+			else
+				alert("Invalid Date");
+		}
+
+		function isValidRange(){
+			if ( $("#datepicker").val() <= $("#datepicker2").val() )
+				return true;
+			else
+				return false;
+		}
+	</script>
+</body>
+</html>
